@@ -1,0 +1,45 @@
+/* Colores y estilos propios, sobre Bootstrap 5. */
+:root { --naranja: #c64c0b; --suave: #fff6ed; }
+html { scroll-behavior: smooth; scroll-padding-top: 20px; }
+body { color: #29251f; }
+h1, h2 { letter-spacing: -1px; }
+h2 { font-weight: 700; line-height: 1.25; }
+.logo-placeholder { border: 2px dashed #d7834e; border-radius: 5px; padding: 10px 22px; color: var(--naranja); font-size: 15px; font-weight: 700; letter-spacing: 2px; }
+.nav-link { color: #49433d; }
+.nav-link:hover, .texto-naranja, .enlace { color: var(--naranja); }
+.btn-naranja { background: var(--naranja); color: white; border: 1px solid var(--naranja); padding: 10px 23px; }
+.btn-naranja:hover { background: #a53d06; border-color: #a53d06; color: white; }
+.banner { background: var(--suave); padding: 34px 0; }
+.etiqueta { color: var(--naranja); font-size: 12px; font-weight: 700; letter-spacing: 2px; margin-bottom: 16px; }
+.seccion { padding-top: 72px; padding-bottom: 72px; }
+.fondo-suave { background: #faf9f7; }
+.card { border: 1px solid #eee8e0; border-radius: 8px; overflow: hidden; }
+.enlace { font-size: 14px; font-weight: 600; text-decoration: none; }
+.enlace:hover { text-decoration: underline; }
+.banner-ilustracion { height: 330px; position: relative; background: #ffe5cd; border-radius: 48% 48% 12px 12px; }
+.bolsa { position: absolute; bottom: 48px; border-radius: 3px 3px 9px 9px; box-shadow: 8px 10px 0 #71300b12; }
+.bolsa::before { content: ''; position: absolute; width: 45%; height: 48px; border: 8px solid #a6410b; border-bottom: 0; border-radius: 40px 40px 0 0; left: 27%; top: -40px; }
+.bolsa-grande { width: 155px; height: 176px; background: #eb762e; left: 45%; transform: rotate(8deg); display: grid; place-items: center; color: white; font-weight: 700; font-size: 32px; }
+.bolsa-pequena { width: 115px; height: 125px; left: 15%; background: #ffb471; transform: rotate(-10deg); }
+.sello { position: absolute; bottom: 15px; left: 0; right: 0; text-align: center; font-size: 12px; color: #8b481f; }
+.producto-imagen { height: 210px; background: #faeadd; display: grid; place-items: center; }
+.variante { background: #f2eee6; }
+.objeto { background: #dc743a; box-shadow: 10px 12px 0 #9b4b2114; }
+.taza { width: 90px; height: 88px; border-radius: 5px 5px 26px 26px; position: relative; }
+.taza::after { content: ''; position: absolute; width: 38px; height: 47px; border: 12px solid #dc743a; border-left: 0; border-radius: 0 25px 25px 0; right: -29px; top: 10px; }
+.libreta { width: 89px; height: 122px; border-radius: 3px 8px 8px 3px; border-left: 9px solid #a34d25; transform: rotate(-10deg); }
+.botella { width: 59px; height: 120px; border-radius: 16px 16px 13px 13px; position: relative; }
+.botella::before { content: ''; position: absolute; width: 32px; height: 17px; top: -14px; left: 14px; border-radius: 5px 5px 0 0; background: #98491f; }
+a:focus-visible, button:focus-visible { outline: 3px solid #8d3606; outline-offset: 4px; }
+@media (max-width: 767px) { .banner { padding: 12px 0; } .banner-ilustracion { max-width: 360px; margin: auto; height: 290px; } .seccion { padding-top: 48px; padding-bottom: 48px; } .navbar-nav { padding-top: 16px; gap: 6px; } }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+/* Carrusel sencillo con los controles a ambos lados. */
+.carrusel { position: relative; border-radius: 10px; overflow: hidden; background: #ffe5cd; }
+.carrusel img { display: block; width: 100%; height: 330px; object-fit: cover; }
+.control-carrusel { position: absolute; top: 50%; transform: translateY(-50%); border: 0; border-radius: 50%; width: 42px; height: 42px; background: white; color: #a53d06; font-size: 22px; cursor: pointer; }
+.control-carrusel:hover { background: #fff0e3; }
+.anterior { left: 10px; }
+.siguiente { right: 10px; }
+.contador-fotos { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); margin: 0; padding: 4px 12px; border-radius: 20px; background: #29251fe6; color: white; font-size: 12px; }
+@media (max-width: 767px) { .carrusel img { height: 290px; } }
