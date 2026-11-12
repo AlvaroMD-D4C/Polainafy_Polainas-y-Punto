@@ -19,3 +19,10 @@ Diseño y desarrollo de una página web de comercio electrónico utilizando HTML
        height="500"
        style="object-fit: fill;">
 </p>
+
+<p align="center">
+  <img src="polainas.png"
+       width="50%"
+       height="50%"
+       style="object-fit: fill;">
+</p>
