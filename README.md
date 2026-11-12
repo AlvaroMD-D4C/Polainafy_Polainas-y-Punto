@@ -10,3 +10,8 @@
 ```
 Desarrollo de una web 'e-commerce' con HTML CSS y Bootstrap.
 Diseño y desarrollo de una página web de comercio electrónico utilizando HTML5, CSS3 y Bootstrap 5.
+
+
+<p align="center">
+  <img src="polainas-villistas-7203044.webp" width="700">
+</p>
