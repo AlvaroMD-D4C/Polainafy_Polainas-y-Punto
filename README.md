@@ -14,5 +14,7 @@ Diseño y desarrollo de una página web de comercio electrónico utilizando HTML
 
 
 <p align="center">
-  <img src="polainas-villistas-7203044.webp" width="700">
+  <img src="polainas-villistas-7203044.webp"
+       width="100%"
+       height="900">
 </p>
