@@ -1,97 +1,194 @@
-(() => {
-  const cubierta = document.getElementById('cubierta-rasca');
-  const contexto = cubierta.getContext('2d', { willReadFrequently: true });
-  const premio = document.getElementById('premio');
-  const boton = document.getElementById('accion-rasca');
-  const descuento = document.getElementById('descuento');
-  const codigo = document.getElementById('codigo');
-  const estado = document.getElementById('estado-rasca');
-  const instrucciones = document.getElementById('instrucciones-rasca');
-  const { width: ancho, height: alto } = cubierta;
+const cubierta = document.querySelector('#cubierta-rasca');
+const contexto = cubierta.getContext('2d', { willReadFrequently: true });
+const premio = document.querySelector('#premio');
+const descuento = document.querySelector('#descuento');
+const codigo = document.querySelector('#codigo');
+const accion = document.querySelector('#accion-rasca');
+const estado = document.querySelector('#estado-rasca');
+const instrucciones = document.querySelector('#instrucciones-rasca');
+const confeti = document.querySelector('#confeti-rasca');
+const porcentajes = [5, 10, 15, 20];
+const caracteres = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+let revelado = false;
+let hayPremio = false;
+let granPremio = false;
+let puntero = null;
+let puntoAnterior = null;
 
-  descuento.textContent = '10 % de descuento';
-  codigo.textContent = 'POLAINA10';
-  premio.setAttribute('aria-hidden', 'true');
+function prepararRasca() {
+  const tirada = Math.floor(Math.random() * 2000);
+  granPremio = tirada === 1999;
+  hayPremio = tirada >= 500;
+  confeti.replaceChildren();
+  document.documentElement.classList.remove('rasca-gran-premio');
+
+  if (granPremio) {
+    descuento.textContent = '¡Toda la tienda gratis!';
+  } else if (hayPremio) {
+    const porcentaje = porcentajes[Math.floor(Math.random() * porcentajes.length)];
+    descuento.textContent = porcentaje + ' % de descuento';
+  } else {
+    descuento.textContent = 'Esta vez no hay premio';
+  }
+
+  codigo.textContent = '';
+  codigo.hidden = !hayPremio;
+  if (hayPremio) {
+    const sufijo = Array.from({ length: 6 }, () =>
+      caracteres[Math.floor(Math.random() * caracteres.length)]
+    ).join('');
+    codigo.textContent = (granPremio ? 'DEMO-GRATIS-' : 'DEMO-') + sufijo;
+  }
+
   premio.hidden = false;
-  boton.hidden = false;
+  premio.setAttribute('aria-hidden', 'true');
+  revelado = false;
+  puntero = null;
+  puntoAnterior = null;
+  accion.textContent = 'Revelar código';
+  instrucciones.textContent = contexto
+    ? 'Desliza el dedo o el ratón por la zona rayada.'
+    : 'Pulsa el botón para descubrir tu código.';
+  estado.textContent = '';
 
-  function revelar() {
+  if (contexto) {
+    cubierta.hidden = false;
+    contexto.fillStyle = '#f7bb8b';
+    contexto.fillRect(0, 0, cubierta.width, cubierta.height);
+    contexto.strokeStyle = '#ffe2c7';
+    contexto.lineWidth = 7;
+
+    for (let x = -cubierta.height; x < cubierta.width; x += 24) {
+      contexto.beginPath();
+      contexto.moveTo(x, cubierta.height);
+      contexto.lineTo(x + cubierta.height, 0);
+      contexto.stroke();
+    }
+
+    contexto.fillStyle = '#fff6ed';
+    contexto.fillRect(117, 49, 166, 47);
+    contexto.fillStyle = '#742b08';
+    contexto.textAlign = 'center';
+    contexto.textBaseline = 'middle';
+    contexto.font = 'bold 20px system-ui, sans-serif';
+    contexto.fillText('RASCA AQUÍ', 200, 73);
+  } else {
     cubierta.hidden = true;
-    premio.removeAttribute('aria-hidden');
-    boton.disabled = true;
-    boton.textContent = 'Código revelado';
-    instrucciones.textContent = 'Has descubierto tu código de demostración.';
-    estado.textContent = descuento.textContent + '. Código ' + codigo.textContent + '.';
+    premio.hidden = true;
   }
+}
 
-  boton.addEventListener('click', revelar);
-  if (!contexto) {
-    revelar();
-    return;
-  }
+function celebrarPremio() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-  contexto.fillStyle = '#b7afa7';
-  contexto.fillRect(0, 0, ancho, alto);
-  contexto.strokeStyle = '#d5cec7';
-  contexto.lineWidth = 4;
-  contexto.beginPath();
-  for (let x = -alto; x < ancho; x += 12) {
-    contexto.moveTo(x, alto);
-    contexto.lineTo(x + alto, 0);
+  const colores = ['#ffd18c', '#fff6ed', '#ff8a47', '#ffdf66', '#ffd1dc'];
+  const cantidad = granPremio ? 70 : 32;
+
+  for (let indice = 0; indice < cantidad; indice += 1) {
+    const pieza = document.createElement('span');
+    pieza.style.left = (Math.random() * 100) + '%';
+    pieza.style.backgroundColor = colores[indice % colores.length];
+    pieza.style.setProperty('--deriva', (Math.random() * 120 - 60) + 'px');
+    pieza.style.animationDelay = (Math.random() * 450) + 'ms';
+    pieza.style.animationDuration = (950 + Math.random() * 650) + 'ms';
+    pieza.addEventListener('animationend', () => pieza.remove(), { once: true });
+    confeti.append(pieza);
   }
-  contexto.stroke();
+}
+
+function celebrarGranPremio() {
+  const pagina = document.documentElement;
+  const centroVisible = window.scrollY + window.innerHeight / 2;
+  pagina.style.setProperty('--centro-giro', centroVisible + 'px');
+  pagina.classList.add('rasca-gran-premio');
+}
+
+document.body.addEventListener('animationend', (evento) => {
+  if (evento.animationName !== 'rasca-giro-pagina') return;
+  document.documentElement.classList.remove('rasca-gran-premio');
+  document.documentElement.style.removeProperty('--centro-giro');
+});
+
+function revelarRasca() {
+  revelado = true;
+  puntero = null;
+  puntoAnterior = null;
+  cubierta.hidden = true;
+  premio.hidden = false;
+  premio.removeAttribute('aria-hidden');
+  instrucciones.textContent = hayPremio ? '¡Te ha tocado un premio de demo!' : 'Puedes probar suerte otra vez.';
+  accion.textContent = 'Probar otro rasca';
+  estado.textContent = descuento.textContent;
+  if (hayPremio) {
+    estado.textContent += ' Código de demo: ' + codigo.textContent;
+    celebrarPremio();
+    if (granPremio) celebrarGranPremio();
+  }
+}
+
+function rascar(evento) {
+  const rectangulo = cubierta.getBoundingClientRect();
+  const x = (evento.clientX - rectangulo.left) * cubierta.width / rectangulo.width;
+  const y = (evento.clientY - rectangulo.top) * cubierta.height / rectangulo.height;
 
   contexto.globalCompositeOperation = 'destination-out';
-  contexto.lineWidth = 36;
-  contexto.lineCap = 'round';
-  let puntero = null;
-  let anterior;
-  let ultimaComprobacion = 0;
-
-  function posicion(evento) {
-    const zona = cubierta.getBoundingClientRect();
-    return {
-      x: (evento.clientX - zona.left) * ancho / zona.width,
-      y: (evento.clientY - zona.top) * alto / zona.height
-    };
-  }
-
-  function comprobarSuperficie() {
-    const pixeles = contexto.getImageData(0, 0, ancho, alto).data;
-    let borrados = 0;
-    for (let i = 3; i < pixeles.length; i += 4) {
-      if (pixeles[i] < 128) borrados++;
-    }
-    if (borrados >= ancho * alto * 0.45) revelar();
-  }
-
-  cubierta.addEventListener('pointerdown', (evento) => {
-    if (puntero !== null || evento.button !== 0) return;
-    puntero = evento.pointerId;
-    cubierta.setPointerCapture(puntero);
-    anterior = posicion(evento);
-    contexto.beginPath();
-    contexto.arc(anterior.x, anterior.y, contexto.lineWidth / 2, 0, 2 * Math.PI);
-    contexto.fill();
-  });
-
-  cubierta.addEventListener('pointermove', (evento) => {
-    if (evento.pointerId !== puntero || cubierta.hidden) return;
-    const actual = posicion(evento);
-    contexto.beginPath();
-    contexto.moveTo(anterior.x, anterior.y);
-    contexto.lineTo(actual.x, actual.y);
+  contexto.beginPath();
+  if (puntoAnterior) {
+    contexto.lineWidth = 38;
+    contexto.lineCap = 'round';
+    contexto.moveTo(puntoAnterior.x, puntoAnterior.y);
+    contexto.lineTo(x, y);
     contexto.stroke();
-    anterior = actual;
-    if (evento.timeStamp - ultimaComprobacion >= 100) {
-      ultimaComprobacion = evento.timeStamp;
-      comprobarSuperficie();
-    }
-  });
+  } else {
+    contexto.arc(x, y, 19, 0, Math.PI * 2);
+    contexto.fill();
+  }
+  contexto.globalCompositeOperation = 'source-over';
+  puntoAnterior = { x, y };
 
-  cubierta.addEventListener('lostpointercapture', (evento) => {
-    if (evento.pointerId !== puntero) return;
+  const { data } = contexto.getImageData(0, 0, cubierta.width, cubierta.height);
+  let muestras = 0;
+  let borradas = 0;
+  for (let fila = 4; fila < cubierta.height; fila += 8) {
+    for (let columna = 4; columna < cubierta.width; columna += 8) {
+      muestras += 1;
+      if (data[(fila * cubierta.width + columna) * 4 + 3] < 128) {
+        borradas += 1;
+      }
+    }
+  }
+
+  if (borradas / muestras >= 0.42) {
+    revelarRasca();
+  }
+}
+
+cubierta.addEventListener('pointerdown', (evento) => {
+  if (!contexto || revelado || puntero !== null || evento.button !== 0) return;
+  puntero = evento.pointerId;
+  cubierta.setPointerCapture(puntero);
+  rascar(evento);
+});
+
+cubierta.addEventListener('pointermove', (evento) => {
+  if (evento.pointerId === puntero) rascar(evento);
+});
+
+cubierta.addEventListener('lostpointercapture', (evento) => {
+  if (evento.pointerId === puntero) {
     puntero = null;
-    if (!cubierta.hidden) comprobarSuperficie();
-  });
-})();
+    puntoAnterior = null;
+  }
+});
+
+accion.addEventListener('click', () => {
+  if (revelado) {
+    prepararRasca();
+    estado.textContent = 'Nuevo rasca preparado.';
+  } else {
+    revelarRasca();
+  }
+});
+
+prepararRasca();
+accion.hidden = false;
