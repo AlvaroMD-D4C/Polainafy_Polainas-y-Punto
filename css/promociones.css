@@ -1,0 +1,36 @@
+.rasca {
+  box-sizing: border-box;
+  max-width: 30rem;
+  margin-inline: auto;
+  padding: clamp(1rem, 4vw, 2rem);
+  border: 1px solid #e5d4bf;
+  border-radius: 1rem;
+  background: white;
+}
+.rasca-marca { color: var(--naranja); font-weight: 700; letter-spacing: .1em; }
+.rasca-marca span, .rasca-nota { color: #665a50; }
+.rasca-zona {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 400 / 145;
+  overflow: hidden;
+  border-radius: .6rem;
+  background: #fff1df;
+}
+.rasca-premio, #cubierta-rasca {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.rasca-premio:not([hidden]) {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: .25rem;
+}
+.rasca-premio strong { font-size: clamp(1.15rem, 3vw, 1.6rem); }
+.rasca-premio code { color: #883608; font-size: 1rem; }
+#cubierta-rasca { touch-action: none; cursor: crosshair; }
+.rasca-boton { background-color: var(--naranja); color: white; }
+.rasca-boton:hover, .rasca-boton:focus-visible { background-color: #a53d06; color: white; }
