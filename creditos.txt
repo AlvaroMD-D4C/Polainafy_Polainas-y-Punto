@@ -1,0 +1,10 @@
+-- Secciones y sus creadores --
+Index (index.html) - Marcos Lopéz Nuñez
+Catalogo (catalogo.html) - Rahul Chowdhary Parra
+Producto (producto.html) - Musa Younas Aqsa
+Sobre nosotros (sobrenosotros.html) - Álvaro Moreno Díaz
+Contacto (contacto.html) - Sara Izquierdo Dorado
+
+-- Hecho por diversión con IA (ADORNO NO EVALUABLE) --
+Promociones (promociones.html) - Musa Younas Aqsa 
+Guía de tallas (guiadetallas.html) - Musa Younas Aqsa
